@@ -13,9 +13,20 @@
 
 # --- FUNCTIONS ---
 
+# Make and change to dir in one command
 mkcd() {
   mkdir -p -- "$1" && cd -- "$1"
 }
+
+# Change and list directory in one command
+cdls() {
+  cd -- "$1" && ls -GA
+}
+
+# --- ALIASES ---
+
+alias c='clear'
+alias cl='cdls'
 
 # --- ZSH PLUGINS ---
 
@@ -24,7 +35,7 @@ mkcd() {
 # compinit
 
 # Path for zsh plugins
-ZSH_PLUGIN_DIR="$HOME/dotfiles/plugins"
+ZSH_PLUGIN_DIR="$HOME/.dotfiles/home_symlinks/plugins"
 
 # Function to clone if missing
 source_or_clone_plugin() {

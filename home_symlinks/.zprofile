@@ -13,10 +13,10 @@
 #
 
 # echos filename (if in interactive shell, for some safety if called from non-interactive context)
-[[ $- == *i* ]] && echo "[🎉 .zprofile sourced]"
+[[ $- == *i* ]] && echo -n "[🎉 .zprofile sourced] "
 
 # Check if the home directory has the .my_secrets dot file and run contents if so
-test -f "$HOME/.my_secrets" && source "$HOME/.my_secrets" && [[ $- == *i* ]] && echo "[🎉 .my_secrets sourced]"
+test -f "$HOME/.my_secrets" && source "$HOME/.my_secrets" && [[ $- == *i* ]] && echo -n "[🎉 .my_secrets sourced] "
 
 # Updates your environment variables so that you can use Homebrew-installed tools and packages
 eval "$(/opt/homebrew/bin/brew shellenv)"

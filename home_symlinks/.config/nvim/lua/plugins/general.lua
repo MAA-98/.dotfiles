@@ -3,7 +3,7 @@ return {
   {
     "folke/tokyonight.nvim",
     config = function()
-      vim.cmd([[colorscheme tokyonight-storm]])
+      vim.cmd([[colorscheme tokyonight]])
     end,
   },
 
@@ -92,4 +92,25 @@ return {
       require("gitsigns").setup()
     end,
   },
+
+  {
+  "nvim-telescope/telescope.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+      config = function()
+      require('telescope').setup{
+        defaults = {
+          -- You can put your telescope defaults here.
+          -- For example, layout or mappings.
+          file_ignore_patterns = { "_deps", "%.git/", "build/" },
+        }
+      }
+  
+      -- Optional: keymaps for Telescope pickers
+      local opts = { noremap=true, silent=true }
+      vim.api.nvim_set_keymap('n', '<leader>ff', "<cmd>Telescope find_files<cr>", opts)
+      vim.api.nvim_set_keymap('n', '<leader>fg', "<cmd>Telescope live_grep<cr>", opts)
+      vim.api.nvim_set_keymap('n', '<leader>fb', "<cmd>Telescope buffers<cr>", opts)
+      vim.api.nvim_set_keymap('n', '<leader>fh', "<cmd>Telescope help_tags<cr>", opts)
+    end
+  }
 }
