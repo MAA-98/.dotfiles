@@ -3,7 +3,8 @@ return {
   {
     "folke/tokyonight.nvim",
     config = function()
-      vim.cmd([[colorscheme tokyonight]])
+      	-- Set theme later, to dynamically change with dark mode
+	-- vim.cmd([[colorscheme tokyonight-day]])
     end,
   },
 
@@ -94,15 +95,19 @@ return {
   },
 
   {
-  "nvim-telescope/telescope.nvim",
+    "nvim-telescope/telescope.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
-      config = function()
+    config = function()
       require('telescope').setup{
         defaults = {
-          -- You can put your telescope defaults here.
-          -- For example, layout or mappings.
-          file_ignore_patterns = { "_deps", "%.git/", "build/" },
-        }
+     	  find_command = { "fd", "--hidden" },
+          file_ignore_patterns = { "_deps", "%.git/", "build/", "%.DS_Store" }
+        },
+	pickers = {
+	  find_files = {
+	    hidden = true,
+	  }
+	}
       }
   
       -- Optional: keymaps for Telescope pickers

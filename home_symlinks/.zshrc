@@ -27,6 +27,7 @@ cdls() {
 
 alias c='clear'
 alias cl='cdls'
+alias ls='ls -AG' # Escpape with \ls
 
 # --- ZSH PLUGINS ---
 

@@ -1,5 +1,5 @@
 -- Basic settings
-vim.g.mapleader = " "
+vim.g.mapleader = " "             -- Space as leader key
 vim.o.number = true               -- Show line numbers
 vim.o.expandtab = true            -- Use spaces instead of tabs
 vim.o.shiftwidth = 4              -- Indent with 4 spaces
@@ -30,3 +30,6 @@ vim.diagnostic.config({
   },
 })
 vim.g.netrw_liststyle = 3	      -- Open file explorer in tree view
+
+-- Some leader key shortcuts
+vim.api.nvim_set_keymap('n', '<Esc>', 'i', { noremap = true, silent = true })       -- In normal mode, Esc goes to insertion mode
