@@ -4,7 +4,7 @@ return {
     "folke/tokyonight.nvim",
     config = function()
       	-- Set theme later, to dynamically change with dark mode
-	-- vim.cmd([[colorscheme tokyonight-day]])
+    	-- vim.cmd([[colorscheme tokyonight-day]])
     end,
   },
 

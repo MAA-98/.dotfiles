@@ -7,4 +7,9 @@ style = "Regular"
 
 [font.italic]
 family = "SF Mono"
-style = "Italic"
+style = "Regular Italic"
+
+[font.bold_italic]
+family = "SF Mono"
+style = "Semibold Italic"
+

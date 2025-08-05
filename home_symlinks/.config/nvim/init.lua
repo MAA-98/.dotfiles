@@ -18,6 +18,9 @@ local function set_macOS_theme()
   else
     vim.cmd("colorscheme tokyonight-day")   -- light variant
   end
+
+  -- Remove or soften fold highlight after colorscheme loads
+  vim.cmd("highlight Folded guibg=NONE gui=bold,italic,underline cterm=NONE guisp=NONE")
 end
 
 -- Call the function after plugins have loaded
