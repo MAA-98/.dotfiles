@@ -11,7 +11,7 @@ DOTFILES_DEST="$HOME/.dotfiles/home_symlinks/"
 
 echo "Creating symlinks from /home_symlinks to home."
 # Array of config files to symlink, for now just:
-files=(.zshrc .zprofile)
+files=(.zshrc .zprofile .config)
 
 for file in "${files[@]}"; do
   target="$DOTFILES_DEST/$file"

@@ -23,7 +23,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # --- PATHS ---
 # Created by `pipx` on 2025-07-23 19:44:10
-export PATH="$PATH:/Users/marek/.local/bin"
+#export PATH="$PATH:/Users/marek/.local/bin"
 # Created by LLVM: brew install llvm
-export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+#export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 
