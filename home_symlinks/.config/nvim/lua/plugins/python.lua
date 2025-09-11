@@ -1,4 +1,5 @@
 return {
+    -- DEPRECATING: ALL nvim-lspconfig CONFIG SHOULD BE TOGETHER TO WORK 
     -- LSP Configuration: Pyright for Python language server using nvim-lspconfig
     "neovim/nvim-lspconfig",
     config = function()

@@ -76,3 +76,5 @@ vim.opt.foldtext = "v:lua.custom_fold_text()"           -- Set foldtext option t
 
 --- Keybinds ---
 vim.api.nvim_set_keymap('n', '<Esc>', 'i', { noremap = true, silent = true }) -- In normal mode, Esc goes to insertion mode
+vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { noremap = true, silent = true }) -- `leader,c,a` for code actions from LSP
+
