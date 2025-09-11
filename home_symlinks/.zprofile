@@ -22,8 +22,15 @@ test -f "$HOME/.my_secrets" && source "$HOME/.my_secrets" && [[ $- == *i* ]] && 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # --- PATHS ---
-# Created by `pipx` on 2025-07-23 19:44:10
-#export PATH="$PATH:/Users/marek/.local/bin"
-# Created by LLVM: brew install llvm
-#export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+computer_name=$(scutil --get ComputerName)
+if [[ "$computer_name" == "MacBookAir0" ]]; then
+    # Created by `pipx` on 2025-07-23 19:44:10
+    export PATH="$PATH:/Users/marek/.local/bin"
+    # Created by LLVM: brew install llvm
+    export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+else
+  # Default or fallback path additions, if any
+  :
+fi
+
 
