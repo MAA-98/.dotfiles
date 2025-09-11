@@ -1,9 +1,10 @@
 return {
   {
-    -- LSP Configuration: clangd for C and C++ language server using nvim-lspconfig
+    -- LSP Configuration: clangd, pyright, dartls
     "neovim/nvim-lspconfig",
     config = function()
-      -- Set up clangd lang server for C and C++
+
+      -- Set up clangd LS for C and C++
       require("lspconfig").clangd.setup({
         cmd = {
             "clangd",
@@ -27,7 +28,7 @@ return {
         end,
       })
 
-      -- Set up Pyright language server for Python
+      -- Set up Pyright LS for Python
       require("lspconfig").pyright.setup({
         cmd = { "/opt/homebrew/bin/pyright-langserver", "--stdio"},
        -- settings = {
@@ -43,6 +44,15 @@ return {
 --            vim.lsp.semantic_tokens.start(bufnr)
 --          end
           print("Attached to Pyright LSP")
+        end,
+      })
+
+      -- Set up Dart LS for Dart
+      require("lspconfig").dartls.setup({
+        filetypes = { "dart" },
+        root_dir = require("lspconfig.util").root_pattern("pubspec.yaml", ".git"),
+        on_attach = function(client, bufnr)
+          print("Attached to Dart LSP")
         end,
       })
 
