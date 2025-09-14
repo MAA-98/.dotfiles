@@ -15,32 +15,67 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Make sure to setup `mapleader` and `maplocalleader` before
--- loading lazy.nvim so that mappings are correct.
--- This is also a good place to setup other settings (vim.opt)
-vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
+require('lazy').setup({
+  -- Import general/common plugins that load normally (not lazy-loaded by filetype)
+  { import = "plugins.general" },
 
--- Setup lazy.nvim
-require("lazy").setup({
-  spec = {
-    -- Import general/common plugins that load normally (not lazy-loaded by filetype)
-    { import = "plugins.general" },
-
-    -- Lazy-load the python-specific plugins module on python files or commands
-    { 
-       import = "plugins.python",
-      -- Load only when a Python file is opened (lazy load)
-      ft = "python",
-      -- optionally also trigger on commands if you want
-      -- cmd = { "PyrightOrganizeImports", "Black" },
-    },
-    -- Same for C/C++ and clang
-    {
-      import = "plugins.clang",
-      ft = { "c", "cpp", "h", "hpp" }, -- load on C/C++ filetypes
-    },
+  -- Python LSP, loaded on Python files:
+  {
+    "neovim/nvim-lspconfig",
+    ft = "python",
+    config = function()
+      -- Set up Pyright LS for Python
+      require("lspconfig").pyright.setup({
+        cmd = { "/opt/homebrew/bin/pyright-langserver", "--stdio"},
+        on_attach = function(client, bufnr)
+          print("Attached to Pyright LSP")
+        end,
+      })
+    end,
   },
+  -- C/C++ LSP, loaded on C/C++ files:
+  {
+    "neovim/nvim-lspconfig",
+    ft = { "c", "cpp", "h", "hpp" },        -- load on C/C++ filetypes
+    config = function()
+      -- Set up clangd LS for C and C++
+      require("lspconfig").clangd.setup({
+        cmd = {
+            "clangd",
+            "--background-index",           -- enable background indexing for faster queries
+            "--clang-tidy",                 -- enable clang-tidy style linting
+            "--completion-style=detailed",  -- detailed completion items including signatures
+            "--cross-file-rename",          -- enable cross file rename support
+        },
+        init_options = {
+            clangdFileStatus = true,       -- display file status in the status bar
+            usePlaceholders = true,        -- insert argument placeholders in completion
+            completeUnimported = true,     -- complete symbols that haven't been #included yet
+            semanticHighlighting = true,   -- enable semantic highlighting
+        },
+        on_attach = function(client, bufnr)
+          print("Attached to clangd LSP")
+        end,
+      })
+    end,
+  },
+  -- Dart LSP, loaded on Dart files:
+  {
+    "neovim/nvim-lspconfig",
+    ft = "dart",
+    config = function()
+      -- Set up Dart LS for Dart
+      require("lspconfig").dartls.setup({
+        filetypes = { "dart" },
+        root_dir = require("lspconfig.util").root_pattern("pubspec.yaml", ".git"),
+        on_attach = function(client, bufnr)
+          print("Attached to Dart LSP")
+        end,
+      })
+    end,
+  },
+
+
   -- automatically check for plugin updates
   checker = { enabled = true },
 })

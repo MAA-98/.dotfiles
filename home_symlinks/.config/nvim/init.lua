@@ -1,7 +1,7 @@
--- General editor options
+-- General editor options and keybinds
 require("config.settings")
 
--- Plugin manager bootstrap and setup
+-- Plugin manager setup, leader key(s) should be set beforehand
 require("config.lazy")
 
 -- Set theme dynamically according to dark mode, has to be after plugins loaded
