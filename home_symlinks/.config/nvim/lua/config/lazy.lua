@@ -19,63 +19,93 @@ require('lazy').setup({
   -- Import general/common plugins that load normally (not lazy-loaded by filetype)
   { import = "plugins.general" },
 
-  -- Python LSP, loaded on Python files:
+  -- Mason for lazy loading LSP servers
+  {
+    "williamboman/mason.nvim",
+    cmd = "Mason",
+    config = function()
+      require("mason").setup()
+    end,
+  },
+  {
+    "williamboman/mason-lspconfig.nvim",
+    after = "mason.nvim",
+    config = function()
+      require("mason-lspconfig").setup({
+        ensure_installed = { "pyright", "clangd" }, -- servers you want installed
+        automatic_installation = true,
+      })
+    end,
+  },
+  
+  -- LSP Server
   {
     "neovim/nvim-lspconfig",
-    ft = "python",
+    event = { "BufReadPre", "BufNewFile" },
+    dependencies = {
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+    },
     config = function()
-      -- Set up Pyright LS for Python
-      require("lspconfig").pyright.setup({
-        cmd = { "/opt/homebrew/bin/pyright-langserver", "--stdio"},
+      -- Configure servers with new native API
+      vim.lsp.config('pyright', {
+        --cmd = { "/opt/homebrew/bin/pyright-langserver", "--stdio" },
         on_attach = function(client, bufnr)
           print("Attached to Pyright LSP")
         end,
       })
-    end,
-  },
-  -- C/C++ LSP, loaded on C/C++ files:
-  {
-    "neovim/nvim-lspconfig",
-    ft = { "c", "cpp", "h", "hpp" },        -- load on C/C++ filetypes
-    config = function()
-      -- Set up clangd LS for C and C++
-      require("lspconfig").clangd.setup({
+  
+      vim.lsp.config('clangd', {
         cmd = {
-            "clangd",
-            "--background-index",           -- enable background indexing for faster queries
-            "--clang-tidy",                 -- enable clang-tidy style linting
-            "--completion-style=detailed",  -- detailed completion items including signatures
-            "--cross-file-rename",          -- enable cross file rename support
+          "clangd",
+          "--background-index",
+          "--clang-tidy",
+          "--completion-style=detailed",
+          "--cross-file-rename",
         },
         init_options = {
-            clangdFileStatus = true,       -- display file status in the status bar
-            usePlaceholders = true,        -- insert argument placeholders in completion
-            completeUnimported = true,     -- complete symbols that haven't been #included yet
-            semanticHighlighting = true,   -- enable semantic highlighting
+          clangdFileStatus = true,
+          usePlaceholders = true,
+          completeUnimported = true,
+          semanticHighlighting = true,
         },
         on_attach = function(client, bufnr)
           print("Attached to clangd LSP")
         end,
       })
+--[[ 
+      vim.lsp.config('dartls', {
+        cmd = { "/opt/homebrew/bin/dart", "language-server" },
+        --root_dir = require("lspconfig.util").root_pattern("pubspec.yaml", ".git"),
+        on_attach = function(client, bufnr)
+          print("Attached to dartls")
+        end,
+      })
+      -- Auto start dartls for Dart files if not attached
+       vim.api.nvim_create_autocmd("FileType", {
+         pattern = "dart",
+         callback = function()
+           local clients = vim.lsp.get_active_clients({ name = "dartls" })
+           if #clients == 0 then
+             vim.cmd("silent! LspStart dartls")
+           end
+         end,
+       })
+]]
     end,
   },
-  -- Dart LSP, loaded on Dart files:
   {
-    "neovim/nvim-lspconfig",
-    ft = "dart",
+    "nvim-flutter/flutter-tools.nvim",
+    ft = { "dart" },  -- Load only when opening Dart files
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "stevearc/dressing.nvim",  -- optional for better UI
+    },
     config = function()
-      -- Set up Dart LS for Dart
-      require("lspconfig").dartls.setup({
-        filetypes = { "dart" },
-        root_dir = require("lspconfig.util").root_pattern("pubspec.yaml", ".git"),
-        on_attach = function(client, bufnr)
-          print("Attached to Dart LSP")
-        end,
+      require("flutter-tools").setup({
       })
     end,
   },
-
-
   -- automatically check for plugin updates
   checker = { enabled = true },
 })
