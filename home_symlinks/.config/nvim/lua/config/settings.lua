@@ -3,8 +3,8 @@ vim.g.mapleader = " "             -- Space as leader key
 vim.g.maplocalleader = "\\"
 vim.o.number = true               -- Show line numbers
 vim.o.expandtab = true            -- Use spaces instead of tabs
-vim.o.shiftwidth = 4              -- Indent with 4 spaces
-vim.o.tabstop = 4
+vim.o.shiftwidth = 2              -- Indent with 4 spaces
+vim.o.tabstop = 2
 vim.o.smartindent = true
 vim.o.termguicolors = true        -- for true color support
 vim.o.updatetime = 300            -- Faster completion experience
@@ -79,3 +79,6 @@ vim.api.nvim_set_keymap('n', '<Esc>', 'i', { noremap = true, silent = true }) --
 vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { noremap = true, silent = true }) -- `leader,c,a` for code actions from LSP
 vim.keymap.set('n', '<Left>', 'b', { noremap = true, silent = true }) -- Arrow keys jump in normal mode
 vim.keymap.set('n', '<Right>', 'e', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', { noremap=true, silent=true }) -- normal mode g,d goes to LSP definitions
+vim.api.nvim_set_keymap('n', '<leader>bd', '<cmd>bd<CR>', { noremap = true, silent = true }) -- `leader, b,d` deletes buffer
+vim.api.nvim_set_keymap('n', '<leader>wq', '<cmd>wq<CR>', { noremap = true, silent = true }) -- `leader w,q` saves and quits
