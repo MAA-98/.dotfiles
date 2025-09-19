@@ -82,3 +82,5 @@ vim.keymap.set('n', '<Right>', 'e', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', { noremap=true, silent=true }) -- normal mode g,d goes to LSP definitions
 vim.api.nvim_set_keymap('n', '<leader>bd', '<cmd>bd<CR>', { noremap = true, silent = true }) -- `leader, b,d` deletes buffer
 vim.api.nvim_set_keymap('n', '<leader>wq', '<cmd>wq<CR>', { noremap = true, silent = true }) -- `leader w,q` saves and quits
+vim.api.nvim_set_keymap('n', '<leader>wbd', '<cmd>w | bd<CR>', { noremap = true, silent = true }) -- leader, w, b, d writes and deletes buffer
+
