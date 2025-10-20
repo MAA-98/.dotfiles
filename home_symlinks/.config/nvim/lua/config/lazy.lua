@@ -47,6 +47,46 @@ require('lazy').setup({
       "williamboman/mason-lspconfig.nvim",
     },
     config = function()
+      local lspconfig = require('lspconfig')
+
+      vim.env.PATH = vim.env.PATH .. ':/opt/homebrew/bin' -- make sure this is before configs
+
+    lspconfig.pyright.setup({
+      on_attach = function(client, bufnr)
+        print("Attached to Pyright LSP")
+      end,
+    })
+
+    lspconfig.clangd.setup({
+      cmd = {
+        "clangd",
+        "--background-index",
+        "--clang-tidy",
+        "--completion-style=detailed",
+        "--cross-file-rename",
+      },
+      init_options = {
+        clangdFileStatus = true,
+        usePlaceholders = true,
+        completeUnimported = true,
+        semanticHighlighting = true,
+      },
+      on_attach = function(client, bufnr)
+        print("Attached to clangd LSP")
+      end,
+    })
+
+    lspconfig.hls.setup({
+      cmd = { "/opt/homebrew/bin/haskell-language-server-wrapper", "--lsp" },
+      filetypes = { "haskell", "lhaskell", "cabal" },
+      root_dir = lspconfig.util.root_pattern(
+        'hie.yaml', 'stack.yaml', 'package.yaml.lock', '.git'
+      ),
+      on_attach = function(client, bufnr)
+        print("Attached to Haskell Language Server")
+      end,
+    })
+    --[[
       -- Configure servers with new native API
       vim.lsp.config('pyright', {
         --cmd = { "/opt/homebrew/bin/pyright-langserver", "--stdio" },
@@ -73,25 +113,21 @@ require('lazy').setup({
           print("Attached to clangd LSP")
         end,
       })
---[[ 
-      vim.lsp.config('dartls', {
-        cmd = { "/opt/homebrew/bin/dart", "language-server" },
-        --root_dir = require("lspconfig.util").root_pattern("pubspec.yaml", ".git"),
+
+      vim.env.PATH = vim.env.PATH .. ':/opt/homebrew/bin'    -- Important so Neovim can find hls
+      vim.lsp.set_log_level("debug")    -- Optional, makes LSP logs verbose for debugging
+
+      vim.lsp.config('hls', {
+        cmd = { "/opt/homebrew/bin/haskell-language-server-wrapper", "--lsp" },
+        filetypes = { "haskell", "lhaskell", "cabal" },  -- HLS common filetypes
+        root_dir = require('lspconfig.util').root_pattern(
+          'hie.yaml', 'stack.yaml', 'package.yaml.lock', '.git'
+        ),
         on_attach = function(client, bufnr)
-          print("Attached to dartls")
+          print("Attached to Haskell Language Server")
         end,
       })
-      -- Auto start dartls for Dart files if not attached
-       vim.api.nvim_create_autocmd("FileType", {
-         pattern = "dart",
-         callback = function()
-           local clients = vim.lsp.get_active_clients({ name = "dartls" })
-           if #clients == 0 then
-             vim.cmd("silent! LspStart dartls")
-           end
-         end,
-       })
-]]
+    --]]
     end,
   },
   {
