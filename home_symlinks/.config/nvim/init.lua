@@ -94,11 +94,33 @@ vim.keymap.set('n', '<leader>wq', '<cmd>wq<CR>', { noremap = true, silent = true
 vim.keymap.set('n', '<leader>wbd', '<cmd>w | bd<CR>', { noremap = true, silent = true }) -- leader, w, b, d writes and deletes buffer
 
 --- LSPs ---
+vim.env.PATH = vim.env.PATH .. ':/opt/homebrew/bin' 
+vim.lsp.set_log_level("debug")    -- Optional, makes LSP logs verbose for debugging
+
+vim.lsp.config('clangd', {
+  cmd = {
+    "clangd",
+    "--background-index",
+    "--clang-tidy",
+    "--completion-style=detailed",
+    "--cross-file-rename",
+  },
+  init_options = {
+    clangdFileStatus = true,
+    usePlaceholders = true,
+    completeUnimported = true,
+    semanticHighlighting = true,
+  },
+  on_attach = function(client, bufnr)
+    print("Attached to clangd LSP")
+  end,
+})
+
 vim.lsp.config('pyright', {
   cmd = { "/opt/homebrew/bin/pyright-langserver", "--stdio" },
   filetypes = { 'python' },
   on_attach = function(client, bufnr)
-    print("Attached to Pyright LSP")
+    print("Attached to Pyright LS")
   end,
 })
 vim.lsp.config('hls', {
@@ -106,15 +128,15 @@ vim.lsp.config('hls', {
   filetypes = { "haskell", "lhaskell", "cabal" },  -- HLS common filetypes
   root_markers = { 'hie.yaml', 'stack.yaml', 'package.yaml.lock', '.git' },
   on_attach = function(client, bufnr)
-    print("Attached to Haskell Language Server")
+    print("Attached to Haskell GHC LS")
   end,
 })
-vim.lsp.enable({ 'pyright', 'hls' })
+vim.lsp.enable({ 'clangd', 'pyright', 'hls' })
 
 -- Plugin manager setup, leader key(s) should be set beforehand
 require("config.lazy")
 
--- Set theme dynamically according to dark mode, has to be after plugins loaded
+--- System dark mode dependent theme, has to be after plugins loaded ---
 local function is_dark_mode()
   local handle = io.popen("defaults read -g AppleInterfaceStyle 2>/dev/null")
   local result = handle:read("*a")
@@ -133,10 +155,8 @@ local function set_macOS_theme()
   vim.cmd("highlight Folded guibg=NONE gui=bold,italic,underline cterm=NONE guisp=NONE")
 end
 
--- Call the function after plugins have loaded
-set_macOS_theme()
--- Command for refreshing theme
-vim.api.nvim_create_user_command("ReloadTheme", set_macOS_theme, {})
+set_macOS_theme() -- Call the function after plugins have loaded
+vim.api.nvim_create_user_command("ReloadTheme", set_macOS_theme, {}) -- Command for refreshing theme
 
 -- Direct to use py venv which has pynvim and lang tools installed
 vim.g.python3_host_prog = "/Users/marek/.python_venvs/nvim/bin/python"
