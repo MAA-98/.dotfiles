@@ -50,13 +50,7 @@ require('lazy').setup({
       local lspconfig = require('lspconfig')
 
       vim.env.PATH = vim.env.PATH .. ':/opt/homebrew/bin' -- make sure this is before configs
-
-    lspconfig.pyright.setup({
-      on_attach = function(client, bufnr)
-        print("Attached to Pyright LSP")
-      end,
-    })
-
+    
     lspconfig.clangd.setup({
       cmd = {
         "clangd",
@@ -76,25 +70,8 @@ require('lazy').setup({
       end,
     })
 
-    lspconfig.hls.setup({
-      cmd = { "/opt/homebrew/bin/haskell-language-server-wrapper", "--lsp" },
-      filetypes = { "haskell", "lhaskell", "cabal" },
-      root_dir = lspconfig.util.root_pattern(
-        'hie.yaml', 'stack.yaml', 'package.yaml.lock', '.git'
-      ),
-      on_attach = function(client, bufnr)
-        print("Attached to Haskell Language Server")
-      end,
-    })
     --[[
       -- Configure servers with new native API
-      vim.lsp.config('pyright', {
-        --cmd = { "/opt/homebrew/bin/pyright-langserver", "--stdio" },
-        on_attach = function(client, bufnr)
-          print("Attached to Pyright LSP")
-        end,
-      })
-  
       vim.lsp.config('clangd', {
         cmd = {
           "clangd",
@@ -117,16 +94,6 @@ require('lazy').setup({
       vim.env.PATH = vim.env.PATH .. ':/opt/homebrew/bin'    -- Important so Neovim can find hls
       vim.lsp.set_log_level("debug")    -- Optional, makes LSP logs verbose for debugging
 
-      vim.lsp.config('hls', {
-        cmd = { "/opt/homebrew/bin/haskell-language-server-wrapper", "--lsp" },
-        filetypes = { "haskell", "lhaskell", "cabal" },  -- HLS common filetypes
-        root_dir = require('lspconfig.util').root_pattern(
-          'hie.yaml', 'stack.yaml', 'package.yaml.lock', '.git'
-        ),
-        on_attach = function(client, bufnr)
-          print("Attached to Haskell Language Server")
-        end,
-      })
     --]]
     end,
   },

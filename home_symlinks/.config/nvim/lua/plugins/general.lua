@@ -103,11 +103,11 @@ return {
      	  find_command = { "fd", "--hidden" },
           file_ignore_patterns = { "_deps", "%.git/", "build/", "%.DS_Store" }
         },
-	pickers = {
-	  find_files = {
-	    hidden = true,
-	  }
-	}
+        pickers = {
+          find_files = {
+            hidden = true,
+          }
+        }
       }
   
       -- Keymaps for Telescope pickers
