@@ -105,6 +105,7 @@ vim.lsp.config('clangd', {
     "--completion-style=detailed",
     "--cross-file-rename",
   },
+  filetypes = { "c", "cpp", "objc", "objcpp" },
   init_options = {
     clangdFileStatus = true,
     usePlaceholders = true,
