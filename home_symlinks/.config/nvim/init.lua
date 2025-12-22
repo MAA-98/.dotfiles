@@ -19,7 +19,7 @@ vim.opt.foldmethod = "indent"
 vim.opt.foldenable = true
 vim.opt.foldlevel = 99              -- Folds deeper than 99 levels folded by default
 vim.opt.fillchars = vim.opt.fillchars + { fold = " " } -- Use spaces instead of dots for the rest of indent line
-function _G.custom_fold_text()      -- Custom foldtext function
+function _G.custom_fold_text()      -- Custom foldtext function: TO FIX
   local start_line = vim.v.foldstart
   local end_line = vim.v.foldend
   local line_count = end_line - start_line + 1
@@ -54,6 +54,7 @@ function _G.custom_fold_text()      -- Custom foldtext function
 end
 
 vim.opt.foldtext = "v:lua.custom_fold_text()"           -- Set foldtext option to use this function
+
 -- Note the color of highlights is adjusted in tokyonight cmd call
 
 --- Diagnostic Options ---
@@ -98,9 +99,7 @@ vim.env.PATH = vim.env.PATH .. ':/opt/homebrew/bin'
 vim.lsp.set_log_level("debug")    -- Optional, makes LSP logs verbose for debugging
 
 vim.lsp.config('clangd', {
-  cmd = {
-    "clangd",
-    "--background-index",
+  cmd = { "clangd", "--background-index",
     "--clang-tidy",
     "--completion-style=detailed",
     "--cross-file-rename",
@@ -124,15 +123,26 @@ vim.lsp.config('pyright', {
     print("Attached to Pyright LS")
   end,
 })
+
 vim.lsp.config('hls', {
-  cmd = { "/opt/homebrew/bin/haskell-language-server-wrapper", "--lsp" },
+  cmd = { "haskell-language-server-wrapper", "--lsp" },
   filetypes = { "haskell", "lhaskell", "cabal" },  -- HLS common filetypes
   root_markers = { 'hie.yaml', 'stack.yaml', 'package.yaml.lock', '.git' },
   on_attach = function(client, bufnr)
     print("Attached to Haskell GHC LS")
   end,
 })
-vim.lsp.enable({ 'clangd', 'pyright', 'hls' })
+
+vim.lsp.config('tsserver', {
+  cmd = { "typescript-language-server", "--stdio" },
+  filetypes = { "typescript", "typescriptreact", "typescript.tsx", "javascript", "javascriptreact", "javascript.jsx" },
+  root_markers = { "package.json", "tsconfig.json", ".git" },
+  on_attach = function(client, bufnr)
+    print("Attached to TypeScript LS")
+  end,
+})
+
+vim.lsp.enable({ 'clangd', 'pyright', 'hls' , 'tsserver'})
 
 -- Plugin manager setup, leader key(s) should be set beforehand
 require("config.lazy")

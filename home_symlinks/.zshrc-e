@@ -74,5 +74,3 @@ ZSH_SYNTAX_HIGHLIGHTING_FILE="$ZSH_SYNTAX_HIGHLIGHTING_DIR/zsh-syntax-highlighti
 
 source_or_clone_plugin "$ZSH_SYNTAX_HIGHLIGHTING_URL" "$ZSH_SYNTAX_HIGHLIGHTING_DIR" "$ZSH_SYNTAX_HIGHLIGHTING_FILE"
 
-
-[ -f "/Users/marek/.ghcup/env" ] && . "/Users/marek/.ghcup/env" # ghcup-env
