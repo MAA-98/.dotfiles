@@ -38,7 +38,7 @@ alias ls='ls -AG' # Escpape with \ls
 # Path for zsh plugins
 ZSH_PLUGIN_DIR="$HOME/.dotfiles/home_symlinks/plugins"
 
-# Function to clone if missing
+# Function used to clone plugin repo if missing
 source_or_clone_plugin() {
   local repo_url=$1
   local plugin_dir_path=$2
@@ -74,5 +74,3 @@ ZSH_SYNTAX_HIGHLIGHTING_FILE="$ZSH_SYNTAX_HIGHLIGHTING_DIR/zsh-syntax-highlighti
 
 source_or_clone_plugin "$ZSH_SYNTAX_HIGHLIGHTING_URL" "$ZSH_SYNTAX_HIGHLIGHTING_DIR" "$ZSH_SYNTAX_HIGHLIGHTING_FILE"
 
-
-[ -f "/Users/marek/.ghcup/env" ] && . "/Users/marek/.ghcup/env" # ghcup-env
