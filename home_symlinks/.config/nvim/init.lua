@@ -124,6 +124,7 @@ vim.lsp.config('pyright', {
   end,
 })
 
+--[[ Not using Haskell these days, taken out 'hls' from `vim.lsp.enable`
 vim.lsp.config('hls', {
   cmd = { "haskell-language-server-wrapper", "--lsp" },
   filetypes = { "haskell", "lhaskell", "cabal" },  -- HLS common filetypes
@@ -132,6 +133,7 @@ vim.lsp.config('hls', {
     print("Attached to Haskell GHC LS")
   end,
 })
+--]]
 
 vim.lsp.config('tsserver', {
   cmd = { "typescript-language-server", "--stdio" },
@@ -142,7 +144,7 @@ vim.lsp.config('tsserver', {
   end,
 })
 
-vim.lsp.enable({ 'clangd', 'pyright', 'hls' , 'tsserver'})
+vim.lsp.enable({ 'clangd', 'pyright', 'tsserver'})
 
 -- Plugin manager setup, leader key(s) should be set beforehand
 require("config.lazy")

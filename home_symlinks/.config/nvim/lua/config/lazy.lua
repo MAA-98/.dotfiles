@@ -19,6 +19,7 @@ require('lazy').setup({
   -- Import general/common plugins that load normally (not lazy-loaded by filetype)
   { import = "plugins.general" },
 
+--[[ Not using Flutter these days
   {
     "nvim-flutter/flutter-tools.nvim",
     ft = { "dart" },  -- Load only when opening Dart files
@@ -31,6 +32,8 @@ require('lazy').setup({
       })
     end,
   },
+--]]
+
   -- automatically check for plugin updates
   checker = { enabled = true },
 })

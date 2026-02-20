@@ -109,7 +109,7 @@ return {
           }
         }
       }
-  
+ 
       -- Keymaps for Telescope pickers
       local opts = { noremap=true, silent=true }
       vim.api.nvim_set_keymap('n', '<leader>ff', "<cmd>Telescope find_files<cr>", opts)
