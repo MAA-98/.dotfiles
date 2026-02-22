@@ -116,9 +116,27 @@ vim.lsp.config('clangd', {
   end,
 })
 
+local function pyright_root(fname)
+  local path = fname
+  if type(path) == "number" then
+    path = vim.api.nvim_buf_get_name(path)
+  end
+  if not path or path == "" then
+    return nil
+  end
+
+  local root_files = { "pyrightconfig.json", ".git" }
+  local found = vim.fs.find(root_files, { path = path, upward = true })
+  if found and #found > 0 then
+    return vim.fs.dirname(found[1])
+  end
+  return nil
+end
+
 vim.lsp.config('pyright', {
   cmd = { "/opt/homebrew/bin/pyright-langserver", "--stdio" },
   filetypes = { 'python' },
+  root_dir = find_python_root,
   on_attach = function(client, bufnr)
     print("Attached to Pyright LS")
   end,
@@ -146,8 +164,57 @@ vim.lsp.config('tsserver', {
 
 vim.lsp.enable({ 'clangd', 'pyright', 'tsserver'})
 
--- Plugin manager setup, leader key(s) should be set beforehand
+--- Python Dev Env Setup ---
+
+-- Neovim needs python version with installed pynvim, this is the venv for it 
+vim.g.python3_host_prog = "/Users/marek/.python_venvs/nvim/bin/python"
+
+--[[
+local function find_project_python()
+  local cwd = vim.fn.getcwd()
+  local candidates = {
+    cwd .. "/.venv/bin/python",
+    cwd .. "/venv/bin/python",
+  }
+  for _, path in ipairs(candidates) do
+    if vim.fn.executable(path) == 1 then
+      return path
+    end
+  end
+  return nil
+end
+
+local function run_python_file()
+  local bufname = vim.api.nvim_buf_get_name(0)
+  if bufname == "" or vim.bo.filetype ~= "python" then
+    vim.notify("No Python file to run", vim.log.levels.WARN)
+    return
+  end
+
+  local python_cmd = find_project_python() or vim.fn.exepath("python3") or vim.fn.exepath("python")
+  if not python_cmd or python_cmd == "" then
+    vim.notify("No Python executable found", vim.log.levels.ERROR)
+    return
+  end
+
+  vim.cmd("botright split | resize 12")
+  vim.cmd("terminal " .. vim.fn.shellescape(python_cmd) .. " " .. vim.fn.shellescape(bufname))
+  vim.cmd("startinsert")
+end
+
+vim.keymap.set("n", "<leader>p", run_python_file, {
+  noremap = true,
+  silent = true,
+  desc = "Run current Python file",
+})
+--]]
+
+--- Lazy.nvim ---
+
+-- leader key(s) should be set beforehand
 require("config.lazy")
+
+--- Helper functions ---
 
 --- System dark mode dependent theme, has to be after plugins loaded ---
 local function is_dark_mode()
@@ -171,5 +238,48 @@ end
 set_macOS_theme() -- Call the function after plugins have loaded
 vim.api.nvim_create_user_command("ReloadTheme", set_macOS_theme, {}) -- Command for refreshing theme
 
--- Direct to use py venv which has pynvim and lang tools installed
-vim.g.python3_host_prog = "/Users/marek/.python_venvs/nvim/bin/python"
+--- Diagnostics ---
+
+-- Helpful diagnostic utilities
+local M = {}
+
+local sev_names = {
+  [vim.diagnostic.severity.ERROR] = "ERROR",
+  [vim.diagnostic.severity.WARN]  = "WARN",
+  [vim.diagnostic.severity.INFO]  = "INFO",
+  [vim.diagnostic.severity.HINT]  = "HINT",
+}
+
+local function format_diag(d, bufnr)
+  local fname = vim.api.nvim_buf_get_name(bufnr)
+  local lnum = (d.lnum or d.range and d.range.start.line or 0) + 1
+  local col  = (d.col  or d.range and d.range.start.character or 0) + 1
+  local sev  = sev_names[d.severity] or "UNKNOWN"
+  local src  = d.source or ""
+  local msg  = d.message:gsub("\n", " ") -- single-line
+  return string.format("%s:%d:%d [%s] %s (%s)", vim.fn.fnamemodify(fname, ":."), lnum, col, sev, msg, src)
+end
+
+-- Copy diagnostics at cursor (all that are on the same line)
+function M.copy_diag_at_cursor()
+  local bufnr = 0
+  local row = vim.api.nvim_win_get_cursor(0)[1] - 1
+  local diags = vim.diagnostic.get(bufnr, {lnum = row})
+  if vim.tbl_isempty(diags) then
+    vim.notify("No diagnostics at cursor line", vim.log.levels.INFO)
+    return
+  end
+  local lines = {}
+  for _, d in ipairs(diags) do
+    table.insert(lines, format_diag(d, bufnr))
+  end
+  vim.fn.setreg("+", table.concat(lines, "\n"))
+  vim.notify("Copied " .. #lines .. " diagnostics to + register", vim.log.levels.INFO)
+end
+
+-- Expose to global for mappings
+_G.DiagUtils = M
+
+-- Keymaps
+vim.keymap.set("n", "<leader>dc", M.copy_diag_at_cursor, {desc = "Copy diagnostics at cursor to + register"})
+

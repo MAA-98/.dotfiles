@@ -15,8 +15,8 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require('lazy').setup({
-  -- Import general/common plugins that load normally (not lazy-loaded by filetype)
+-- Specs table: add other plugin or import entries here
+local specs = {
   { import = "plugins.general" },
 
 --[[ Not using Flutter these days
@@ -33,7 +33,20 @@ require('lazy').setup({
     end,
   },
 --]]
+}
 
-  -- automatically check for plugin updates
+-- Checking plugin specs are not nil or malformed, gives detailed error msg
+for i, spec in ipairs(specs) do
+  if type(spec) == "table" and not (spec[1] or spec.name or spec.import) then
+    error(("plugin spec #%d is missing a repo/import"):format(i))
+  elseif type(spec) ~= "table" and type(spec) ~= "string" then
+    error(("plugin spec #%d has invalid type %s"):format(i, type(spec)))
+  end
+end
+
+-- require with options table adding checker
+require("lazy").setup(specs, {
   checker = { enabled = true },
+  -- other options go here
 })
+

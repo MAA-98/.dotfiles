@@ -30,6 +30,9 @@ chmod +x setup0.sh
 Rebind Caps Lock to Escape:
 *System Settings>Keyboard>Keyboard Shortcuts…>Modifier Keys>Caps Lock Key>Escape*
 
+Show pathnames in Finder:
+*FinderMenu>View>Show Path Bar & Show Menu Bar*
+
 For apps (e.g. Alacritty) to open new windows with cmd+n, not new tabs:
 *System Settings>Desktop & Dock>Windows - Prefer tabs when opening documents>Never*
 
