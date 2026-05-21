@@ -1,26 +1,40 @@
-# Set up from factory
+# Set up 
 
-## Clone .dotfiles
+## 0. From factory settings:
 
+Install basic developer tools:
 ```bash
 xcode-select --install
+```
+
+## 1. Clone .dotfiles
+
+```bash
 cd ~
 git clone https://github.com/MAA-98/.dotfiles
 ```
 
-## Run debloat0.sh script
+## 2. Run debloat_mac.sh script
+
+```bash
+cd ~/.dotfiles/scripts
+chmod +x debloat_mac.sh
+./debloat_mac.sh
+```
+
+## 3. Install brew and dependencies
 
 ```bash
 cd .dotfiles/scripts
-chmod +x debloat0.sh
-./debloat0.sh
+chmod +x install_deps.sh
+./install_deps.sh
 ```
 
-## Run setup0.sh script
+## Run setup.sh script
 
 ```bash
-chmod +x setup0.sh
-./setup0.sh
+chmod +x setup.sh
+./setup.sh
 ```
 
 ## Suggested Next Steps
@@ -40,15 +54,8 @@ Download SF Mono for use in terminal at [Apple](https://developer.apple.com/font
 
 ### Apps
 
-Download Homebrew from [official repo](https://brew.sh):
+Download GitHub's `gh` CLIs:
 ```shell
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-
-Download Alacritty, Neovim, GitHub's `gh` CLIs:
-```shell
-brew install alacritty
-brew install neovim
 brew install gh
 ```
 Set up SSH keys and PATs and save to ~/.my_secrets.

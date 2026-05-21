@@ -1,4 +1,4 @@
 .DS_Store
 
-# Flutter configs may differ
-home_symlinks/.config/flutter/*
+zsh-autosuggestions/
+zsh-syntax-highlighting/

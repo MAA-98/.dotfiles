@@ -6,7 +6,7 @@
 #- Turns down Spotlight to only applications and directories
 #- Turns off Spotlight Suggestions
 #- Turns off recent apps in Dock
-#- Auto hiding Dock, no delay and setting show animation to be quicker.
+#- Auto hiding Dock, no delay and quicker animation.
 
 # Bloatware apps not part of system to be deleted:
 BLOAT_APPS=(
